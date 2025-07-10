@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './ProductList.css'
 import { addItem } from './CartSlice';
-import { useSelector } from 'react-redux';
+import { useDispatch,useSelector } from 'react-redux';
 
 
 import CartItem from './CartItem';
@@ -270,6 +270,11 @@ function ProductList({ onHomeClick }) {
         e.preventDefault();
         setShowCart(false);
     };
+
+    const calculateTotalQuantity = () => {
+  return cartItems ? cartItems.reduce((total, item) => total + item.quantity, 0) : 0;
+};
+
     return (
         <div>
             <div className="navbar" style={styleObj}>
