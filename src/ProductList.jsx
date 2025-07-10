@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './ProductList.css'
 import { addItem } from './CartSlice';
+import { useSelector } from 'react-redux';
+
 
 import CartItem from './CartItem';
 function ProductList({ onHomeClick }) {
@@ -9,6 +11,9 @@ function ProductList({ onHomeClick }) {
     const [addedToCart, setAddedToCart] = useState({});
     const dispatch = useDispatch();
     
+    const cartItems = useSelector(state => state.cart.items);
+    const totalItemCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+
     const handleAddToCart = (product) => {
   dispatch(addItem(product)); // Dispatch the action to add the product to the cart (Redux action)
 
@@ -304,12 +309,18 @@ function ProductList({ onHomeClick }) {
           {/* Display other plant details like description and cost */}
           <div className="product-description">{plant.description}</div> {/* Display plant description */}
           <div className="product-cost">${plant.cost}</div> {/* Display plant cost */}
-          <button
-            className="product-button"
-            onClick={() => handleAddToCart(plant)} // Handle adding plant to cart
-          >
-            Add to Cart
-          </button>
+                <button
+  className="product-button"
+  disabled={addedToCart[plant.name]}
+  style={{
+    backgroundColor: addedToCart[plant.name] ? '#ccc' : '#4CAF50',
+    cursor: addedToCart[plant.name] ? 'not-allowed' : 'pointer'
+  }}
+  onClick={() => handleAddToCart(plant)}
+>
+  {addedToCart[plant.name] ? 'Added to Cart' : 'Add to Cart'}
+</button>
+
         </div>
       ))}
     </div>
